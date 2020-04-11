@@ -40,7 +40,7 @@ function computeCurrentlyInfected(percentage, reportedCases) {
  * to have occured by the requested time
  */
 function computeInfectionsByRequestedTime(currentlyInfected, timeToElapse) {
-  return currentlyInfected * (2 ** Math.floor(timeToElapse / 3));
+  return currentlyInfected * (2 ** Math.trunc(timeToElapse / 3));
 }
 
 /**
@@ -50,7 +50,7 @@ function computeInfectionsByRequestedTime(currentlyInfected, timeToElapse) {
  * @returns {Number}
  */
 function computeSevereCasesByRequestedTime(percentage, infectionsByRequestedTime) {
-  return Math.floor((percentage / 100) * infectionsByRequestedTime);
+  return Math.trunc((percentage / 100) * infectionsByRequestedTime);
 }
 
 /**
@@ -66,7 +66,7 @@ function computeSevereCasesByRequestedTime(percentage, infectionsByRequestedTime
  */
 function computeHospitalBedsByRequestedTime(percentage,
   totalHospitalBeds, severeCasesByRequestedTime) {
-  return Math.floor((percentage / 100) * totalHospitalBeds) - severeCasesByRequestedTime;
+  return Math.trunc((percentage / 100) * totalHospitalBeds) - severeCasesByRequestedTime;
 }
 
 /**
@@ -77,7 +77,7 @@ function computeHospitalBedsByRequestedTime(percentage,
  * @returns {Number}
  */
 function computeCasesForICUByRequestedTime(percentage, infectionsByRequestedTime) {
-  return Math.floor((percentage / 100) * infectionsByRequestedTime);
+  return Math.trunc((percentage / 100) * infectionsByRequestedTime);
 }
 
 /**
@@ -89,7 +89,7 @@ function computeCasesForICUByRequestedTime(percentage, infectionsByRequestedTime
  *  @returns {Number}
  */
 function computeCasesForVentilatorsByRequestedTime(percentage, infectionsByRequestedTime) {
-  return Math.floor((percentage / 100) * infectionsByRequestedTime);
+  return Math.trunc((percentage / 100) * infectionsByRequestedTime);
 }
 
 /**
@@ -105,7 +105,7 @@ function computeDollarsInFlight(infectionsByRequestedTime, avgDailyIncomePopulat
   let tempHolder = infectionsByRequestedTime * (avgDailyIncomePopulation / 100);
   tempHolder *= avgDailyIncomeInUSD;
   tempHolder /= timeToElapse;
-  return Math.floor(tempHolder);
+  return Math.trunc(tempHolder);
 }
 
 /**
