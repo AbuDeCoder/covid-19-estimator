@@ -102,7 +102,7 @@ function computeCasesForVentilatorsByRequestedTime(percentage, infectionsByReque
  */
 function computeDollarsInFlight(infectionsByRequestedTime, avgDailyIncomePopulation,
   avgDailyIncomeInUSD, timeToElapse) {
-  let tempHolder = infectionsByRequestedTime * (avgDailyIncomePopulation / 100);
+  let tempHolder = infectionsByRequestedTime * avgDailyIncomePopulation;
   tempHolder *= avgDailyIncomeInUSD;
   tempHolder /= timeToElapse;
   return Math.trunc(tempHolder);
