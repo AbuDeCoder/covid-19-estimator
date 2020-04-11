@@ -21,6 +21,17 @@ function normaliseTimeToElapseToDays(timeToElapse, periodType) {
 }
 
 /**
+ * function to compute currentlyInfectedPeaiple given percentage and
+ * reported cases
+ * @param {Number} percentage
+ * @param {Number} reportedCases
+ * @returns {Number}
+ */
+function computeCurrentlyInfected(percentage, reportedCases) {
+  return percentage * reportedCases;
+}
+
+/**
  * function to compute the infectionsByRequestedTime
  * give currentlyInfected and timeToElapse in days
  * @param {Number} currentlyInfected
@@ -105,11 +116,14 @@ function computeDollarsInFlight(infectionsByRequestedTime, avgDailyIncomePopulat
 const covid19ImpactEstimator = (data) => {
   const input = data;
   const newTimeToElapse = normaliseTimeToElapseToDays(input.timeToElapse, input.periodType);
+  const currentlyInfectedImpact = computeCurrentlyInfected(10, data.reportedCases);
+  const currentlyInfectedServere = computeCurrentlyInfected(50, data.reportedCases);
+
   return {
     data: input,
     impact: {
       // the estimated number of currently infected people
-      currentlyInfected: data.reportedCases * 10,
+      currentlyInfected: currentlyInfectedImpact,
       // the estimated number of infected peoples at requested time
       infectionsByRequestedTime: computeInfectionsByRequestedTime(this.currentlyInfected,
         newTimeToElapse),
@@ -132,7 +146,7 @@ const covid19ImpactEstimator = (data) => {
     },
     severeImpact: {
       // the estimated number of currently infected people
-      ycurrentlyInfected: data.reportedCases * 50,
+      currentlyInfected: currentlyInfectedServere,
       // the estimated number of infected peoples at requested time
       infectionsByRequestedTime: computeInfectionsByRequestedTime(this.currentlyInfected,
         newTimeToElapse),
