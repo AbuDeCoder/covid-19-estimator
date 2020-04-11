@@ -183,7 +183,7 @@ function determineSevereImpact(input, timeToElapse) {
 
   // determine and set the amount of money in dollars the economy is likely to lose daily
   severeImpact.dollarsInFlight = computeDollarsInFlight(severeImpact.infectionsByRequestedTime,
-    input.avgDailyIncomePopulation, input.avgDailyIncomeInUSD, timeToElapse);
+    input.region.avgDailyIncomePopulation, input.region.avgDailyIncomeInUSD, timeToElapse);
 
   return severeImpact;
 }
