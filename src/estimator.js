@@ -86,7 +86,7 @@ function computeCasesForICUByRequestedTime(percentage, infectionsByRequestedTime
  * and infectionsByRequestedTime
  * @param {Number} percentage
  * @param {Number} infectionsByRequestedTime
- *  @returns {Number}
+ * @returns {Number}
  */
 function computeCasesForVentilatorsByRequestedTime(percentage, infectionsByRequestedTime) {
   return Math.trunc((percentage / 100) * infectionsByRequestedTime);
@@ -98,7 +98,7 @@ function computeCasesForVentilatorsByRequestedTime(percentage, infectionsByReque
  * @param {Number} avgDailyIncomePopulation
  * @param {Number} avgDailyIncomeInUSD
  * @param {Number} timeToElapse
- *  @returns {Number}
+ * @returns {Number}
  */
 function computeDollarsInFlight(infectionsByRequestedTime, avgDailyIncomePopulation,
   avgDailyIncomeInUSD, timeToElapse) {
@@ -142,12 +142,10 @@ function determineImpact(input, timeToElapse) {
 
   // determine and set the amount of money in dollars money the economy is likely to lose daily
   impact.dollarsInFlight = computeDollarsInFlight(impact.infectionsByRequestedTime,
-    input.avgDailyIncomePopulation,
-    input.avgDailyIncomeInUSD, timeToElapse);
+    input.avgDailyIncomePopulation, input.avgDailyIncomeInUSD, timeToElapse);
 
   return impact;
 }
-
 
 /**
  * function to determine and return the severeImpact object
@@ -165,6 +163,7 @@ function determineSevereImpact(input, timeToElapse) {
   severeImpact.infectionsByRequestedTime = computeInfectionsByRequestedTime(
     severeImpact.currentlyInfected, timeToElapse
   );
+
   // determine and set the estimated number of severe cases at requested time
   severeImpact.severeCasesByRequestedTime = computeSevereCasesByRequestedTime(15,
     severeImpact.infectionsByRequestedTime);
@@ -183,8 +182,7 @@ function determineSevereImpact(input, timeToElapse) {
 
   // determine and set the amount of money in dollars the economy is likely to lose daily
   severeImpact.dollarsInFlight = computeDollarsInFlight(severeImpact.infectionsByRequestedTime,
-    input.avgDailyIncomePopulation,
-    input.avgDailyIncomeInUSD, timeToElapse);
+    input.avgDailyIncomePopulation, input.avgDailyIncomeInUSD, timeToElapse);
 
   return severeImpact;
 }
@@ -192,7 +190,7 @@ function determineSevereImpact(input, timeToElapse) {
 /**
  * entry point of the application
  * @param {Object} data
- *  @returns {Object}
+ * @returns {Object}
  */
 const covid19ImpactEstimator = (data) => {
   const input = data;
