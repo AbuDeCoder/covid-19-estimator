@@ -109,6 +109,87 @@ function computeDollarsInFlight(infectionsByRequestedTime, avgDailyIncomePopulat
 }
 
 /**
+ * function to determine and return the impact object
+ * @param {Object} input
+ * @param {Number} timeToElapse
+ * @returns {Object} the impact object
+ */
+function determineImpact(input, timeToElapse) {
+  const impact = {
+    // the estimated number of currently infected people
+    currentlyInfected: computeCurrentlyInfected(10, input.reportedCases)
+  };
+
+  // determine and set the estimated number of infected peoples at requested time
+  impact.infectionsByRequestedTime = computeInfectionsByRequestedTime(impact.currentlyInfected,
+    timeToElapse);
+
+  // determine and set the estimated number of severe cases at requested time
+  impact.severeCasesByRequestedTime = computeSevereCasesByRequestedTime(15,
+    impact.infectionsByRequestedTime);
+
+  // determine the estimated number of hospital Beds available or needed at requested time
+  impact.hospitalBedsByRequestedTime = computeHospitalBedsByRequestedTime(35,
+    input.totalHospitalBeds, impact.severeCasesByRequestedTime);
+
+  // determine and set the estimated number of infected people who will need ICU at requested time
+  impact.casesForICUByRequestedTime = computeCasesForICUByRequestedTime(5,
+    impact.infectionsByRequestedTime);
+
+  // determine the estimated number of infected people who will need ventilators at requested time
+  impact.casesForVentilatorsByRequestedTime = computeCasesForVentilatorsByRequestedTime(2,
+    impact.infectionsByRequestedTime);
+
+  // determine and set the amount of money in dollars money the economy is likely to lose daily
+  impact.dollarsInFlight = computeDollarsInFlight(impact.infectionsByRequestedTime,
+    input.avgDailyIncomePopulation,
+    input.avgDailyIncomeInUSD, timeToElapse);
+
+  return impact;
+}
+
+
+/**
+ * function to determine and return the severeImpact object
+ * @param {Object} input
+ * @param {Number} timeToElapse
+ * @returns {Object} the impact object
+ */
+function determineSevereImpact(input, timeToElapse) {
+  const severeImpact = {
+    // the estimated number of currently infected people
+    currentlyInfected: computeCurrentlyInfected(50, input.reportedCases)
+  };
+
+  // determine and set the estimated number of infected peoples at requested time
+  severeImpact.infectionsByRequestedTime = computeInfectionsByRequestedTime(
+    severeImpact.currentlyInfected, timeToElapse
+  );
+  // determine and set the estimated number of severe cases at requested time
+  severeImpact.severeCasesByRequestedTime = computeSevereCasesByRequestedTime(15,
+    severeImpact.infectionsByRequestedTime);
+
+  // determine the estimated number of hospital Beds available or needed at requested time
+  severeImpact.hospitalBedsByRequestedTime = computeHospitalBedsByRequestedTime(35,
+    input.totalHospitalBeds, severeImpact.severeCasesByRequestedTime);
+
+  // determine and set the estimated number of infected people who will need ICU at requested time
+  severeImpact.casesForICUByRequestedTime = computeCasesForICUByRequestedTime(5,
+    severeImpact.infectionsByRequestedTime);
+
+  // determine the estimated number of infected people who will need ventilators at requested time
+  severeImpact.casesForVentilatorsByRequestedTime = computeCasesForVentilatorsByRequestedTime(2,
+    severeImpact.infectionsByRequestedTime);
+
+  // determine and set the amount of money in dollars money the economy is likely to lose daily
+  severeImpact.dollarsInFlight = computeDollarsInFlight(severeImpact.infectionsByRequestedTime,
+    input.avgDailyIncomePopulation,
+    input.avgDailyIncomeInUSD, timeToElapse);
+
+  return severeImpact;
+}
+
+/**
  * entry point of the application
  * @param {Object} data
  *  @returns {Object}
@@ -116,57 +197,12 @@ function computeDollarsInFlight(infectionsByRequestedTime, avgDailyIncomePopulat
 const covid19ImpactEstimator = (data) => {
   const input = data;
   const newTimeToElapse = normaliseTimeToElapseToDays(input.timeToElapse, input.periodType);
-  const currentlyInfectedImpact = computeCurrentlyInfected(10, data.reportedCases);
-  const currentlyInfectedServere = computeCurrentlyInfected(50, data.reportedCases);
 
   return {
     data: input,
-    impact: {
-      // the estimated number of currently infected people
-      currentlyInfected: currentlyInfectedImpact,
-      // the estimated number of infected peoples at requested time
-      infectionsByRequestedTime: computeInfectionsByRequestedTime(this.currentlyInfected,
-        newTimeToElapse),
-      // the estimated number of severe cases at requested time
-      severeCasesByRequestedTime: computeSevereCasesByRequestedTime(15,
-        this.infectionsByRequestedTime),
-      // the estimated number of hospital Beds available or needed at requested time
-      hospitalBedsByRequestedTime: computeHospitalBedsByRequestedTime(35,
-        input.totalHospitalBeds, this.severeCasesByRequestedTime),
-      // the estimated number of infected people who will need ICU at requested time
-      casesForICUByRequestedTime: computeCasesForICUByRequestedTime(5,
-        this.infectionsByRequestedTime),
-      // the estimated number of infected people who will need ventilators at requested time
-      casesForVentilatorsByRequestedTime: computeCasesForVentilatorsByRequestedTime(2,
-        this.infectionsByRequestedTime),
-      // the amount of money in dollars money the economy is likely to lose daily
-      dollarsInFlight: computeDollarsInFlight(this.infectionsByRequestedTime,
-        input.avgDailyIncomePopulation,
-        input.avgDailyIncomeInUSD, newTimeToElapse)
-    },
-    severeImpact: {
-      // the estimated number of currently infected people
-      currentlyInfected: currentlyInfectedServere,
-      // the estimated number of infected peoples at requested time
-      infectionsByRequestedTime: computeInfectionsByRequestedTime(this.currentlyInfected,
-        newTimeToElapse),
-      // the estimated number of severe cases at requested time
-      severeCasesByRequestedTime: computeSevereCasesByRequestedTime(15,
-        this.infectionsByRequestedTime),
-      // the estimated number of hospital Beds available or needed at requested time
-      hospitalBedsByRequestedTime: computeHospitalBedsByRequestedTime(35,
-        input.totalHospitalBeds, this.severeCasesByRequestedTime),
-      // the estimated number of infected people who will need ICU at requested time
-      casesForICUByRequestedTime: computeCasesForICUByRequestedTime(5,
-        this.infectionsByRequestedTime),
-      // the estimated number of infected people who will need ventilators at requested time
-      casesForVentilatorsByRequestedTime: computeCasesForVentilatorsByRequestedTime(2,
-        this.infectionsByRequestedTime),
-      // the amount of money in dollars money the economy is likely to lose daily
-      dollarsInFlight: computeDollarsInFlight(this.infectionsByRequestedTime,
-        input.avgDailyIncomePopulation,
-        input.avgDailyIncomeInUSD, newTimeToElapse)
-    }
+    impact: determineImpact(input, newTimeToElapse),
+    severeImpact: determineSevereImpact(input, newTimeToElapse)
   };
 };
+
 export default covid19ImpactEstimator;
