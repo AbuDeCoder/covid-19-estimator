@@ -28,7 +28,7 @@ function normaliseTimeToElapseToDays(timeToElapse, periodType) {
  * @returns {Number}
  */
 function computeCurrentlyInfected(percentage, reportedCases) {
-  return percentage * reportedCases;
+  return Math.trunc(percentage * reportedCases);
 }
 
 /**
@@ -66,11 +66,11 @@ function computeSevereCasesByRequestedTime(percentage, infectionsByRequestedTime
  */
 function computeHospitalBedsByRequestedTime(percentage,
   totalHospitalBeds, severeCasesByRequestedTime) {
-  return Math.trunc((percentage / 100) * totalHospitalBeds) - severeCasesByRequestedTime;
+  return Math.trunc(((percentage / 100) * totalHospitalBeds) - severeCasesByRequestedTime);
 }
 
 /**
- * function to compute the number of cases that will need intensive case Unit
+ * function to compute the number of cases that will need intensive care Unit
  * given the percentage of infected cases liked to  need ICU and infectionsByRequestedTime
  * @param {Number} percentage
  * @param {Number} infectionsByRequestedTime
@@ -181,7 +181,7 @@ function determineSevereImpact(input, timeToElapse) {
   severeImpact.casesForVentilatorsByRequestedTime = computeCasesForVentilatorsByRequestedTime(2,
     severeImpact.infectionsByRequestedTime);
 
-  // determine and set the amount of money in dollars money the economy is likely to lose daily
+  // determine and set the amount of money in dollars the economy is likely to lose daily
   severeImpact.dollarsInFlight = computeDollarsInFlight(severeImpact.infectionsByRequestedTime,
     input.avgDailyIncomePopulation,
     input.avgDailyIncomeInUSD, timeToElapse);
