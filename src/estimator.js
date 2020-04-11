@@ -151,7 +151,7 @@ function determineImpact(input, timeToElapse) {
  * function to determine and return the severeImpact object
  * @param {Object} input
  * @param {Number} timeToElapse
- * @returns {Object} the impact object
+ * @returns {Object} the severImpact object
  */
 function determineSevereImpact(input, timeToElapse) {
   const severeImpact = {
@@ -176,7 +176,8 @@ function determineSevereImpact(input, timeToElapse) {
   severeImpact.casesForICUByRequestedTime = computeCasesForICUByRequestedTime(5,
     severeImpact.infectionsByRequestedTime);
 
-  // determine the estimated number of infected people who will need ventilators at requested time
+  // determine and set the estimated number of infected people
+  // who will need ventilators at requested time
   severeImpact.casesForVentilatorsByRequestedTime = computeCasesForVentilatorsByRequestedTime(2,
     severeImpact.infectionsByRequestedTime);
 
